@@ -18,7 +18,7 @@ func main() {
 	)
 
 	//1.建立连接
-	if client, err = mongo.Connect(context.TODO(), "mongodb://112.97.59.119:27017", clientopt.ConnectTimeout(5*time.Second)); err != nil {
+	if client, err = mongo.Connect(context.TODO(), "mongodb://111.229.213.40:27017", clientopt.ConnectTimeout(5*time.Second)); err != nil {
 		fmt.Println(err)
 		return
 	}
