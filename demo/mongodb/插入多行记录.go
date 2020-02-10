@@ -32,11 +32,10 @@ func main() {
 		database   *mongo.Database
 		collection *mongo.Collection
 		record     *LogRecord
-		logArr []interface{}
-		result *mongo.InsertManyResult
-		insertid interface{}
-		docld objectid.ObjectID
-
+		logArr     []interface{}
+		result     *mongo.InsertManyResult
+		insertid   interface{}
+		docld      objectid.ObjectID
 	)
 
 	//1.建立连接
@@ -61,25 +60,20 @@ func main() {
 	}
 
 	//5.批量插入多条
-	logArr = []interface{}{record,record,record}
+	logArr = []interface{}{record, record, record}
 
 	//插入
-	if result,err=collection.InsertMany(context.TODO(),logArr);err!=nil{
+	if result, err = collection.InsertMany(context.TODO(), logArr); err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	for _,insertid = range result.InsertedIDs{
+	for _, insertid = range result.InsertedIDs {
 		//反射
 		docld = insertid.(objectid.ObjectID)
-		fmt.Println("自增ID：",docld.Hex())
+		fmt.Println("自增ID：", docld.Hex())
 		//snowflake(雪花算法)：推特开源，用来生成id
 		//毫秒\微妙的当前时间+机器的ID+当前毫秒/微秒内的自增ID（每当毫秒变化了，会重置为0，继续自增）
 	}
-
-
-
-
-
 
 }
