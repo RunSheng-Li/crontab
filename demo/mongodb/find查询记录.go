@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/mongodb/mongo-go-driver/bson/objectid"
 	"github.com/mongodb/mongo-go-driver/mongo"
 	"github.com/mongodb/mongo-go-driver/mongo/clientopt"
+	"github.com/mongodb/mongo-go-driver/mongo/findopt"
 	"time"
 )
 
@@ -24,6 +24,10 @@ type LogRecord struct {
 	TimePoint TimePoint `bson:"timePoint"` //执行时间点
 }
 
+type FindByJobName struct {
+	JobName string `bson:"jobName"`
+}
+
 func main() {
 
 	var (
@@ -31,11 +35,9 @@ func main() {
 		err        error
 		database   *mongo.Database
 		collection *mongo.Collection
+		cond       *FindByJobName
+		cursor     mongo.Cursor
 		record     *LogRecord
-		logArr     []interface{}
-		result     *mongo.InsertManyResult
-		insertid   interface{}
-		docld      objectid.ObjectID
 	)
 
 	//1.建立连接
@@ -50,30 +52,31 @@ func main() {
 	//3.选择表
 	collection = database.Collection("log")
 
-	//4.插入记录
-	record = &LogRecord{
-		JobName:   "job8",
-		Command:   "echo hello",
-		Err:       "",
-		Content:   "hello",
-		TimePoint: TimePoint{StartTime: time.Now().Unix(), EndTime: time.Now().Unix() + 20},
-	}
+	//4.按照jobName字段过滤
+	cond = &FindByJobName{JobName: "job8"}
 
-	//5.批量插入多条
-	logArr = []interface{}{record, record, record}
-
-	//插入
-	if result, err = collection.InsertMany(context.TODO(), logArr); err != nil {
+	//5.查询 (过滤+翻页)
+	if cursor, err = collection.Find(context.TODO(), cond, findopt.Skip(0), findopt.Limit(2)); err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	for _, insertid = range result.InsertedIDs {
-		//反射
-		docld = insertid.(objectid.ObjectID)
-		fmt.Println("自增ID：", docld.Hex())
-		//snowflake(雪花算法)：推特开源，用来生成id
-		//毫秒\微妙的当前时间+机器的ID+当前毫秒/微秒内的自增ID（每当毫秒变化了，会重置为0，继续自增）
+	//延迟释放游标
+	defer cursor.Close(context.TODO())
+
+	//6.遍历结果集
+	for cursor.Next(context.TODO()) {
+		//定义一个日志对象
+		record = &LogRecord{}
+
+		//反序列化bson到对象
+		if err = cursor.Decode(record); err != nil {
+			fmt.Println(err)
+			return
+		}
+		//把日志打印出来
+		fmt.Println(*record)
+
 	}
 
 }
