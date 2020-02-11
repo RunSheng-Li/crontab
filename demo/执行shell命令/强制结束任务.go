@@ -36,7 +36,7 @@ func main() {
 			output []byte
 			err    error
 		)
-		cmd = exec.CommandContext(ctx, "C:\\cygwin64\\bin\\bash.exe", "-c", "sleep 2;echo hello;")
+		cmd = exec.CommandContext(ctx, "/bin/bash", "-c", "sleep 2;echo hello;")
 
 		// 执行任务, 捕获输出
 		output, err = cmd.CombinedOutput()
@@ -60,5 +60,3 @@ func main() {
 	// 打印任务执行结果
 	fmt.Println(res.err, string(res.output))
 }
-
-//windows下没有调通
