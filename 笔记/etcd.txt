@@ -1,0 +1,9 @@
+nohup ./etcd --listen-client-urls 'http://0.0.0.0:2379' --advertise-client-urls 'http://0.0.0.0:2379' &
+
+ETCDCTL_API=3 ./etcdctl
+
+ETCDCTL_API=3 ./etcdctl put "name" "sam"
+
+ETCDCTL_API=3 ./etcdctl get "name"
+
+ETCDCTL_API=3 ./etcdctl del "name
