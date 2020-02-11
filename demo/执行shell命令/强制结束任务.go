@@ -60,3 +60,5 @@ func main() {
 	// 打印任务执行结果
 	fmt.Println(res.err, string(res.output))
 }
+
+//windows下没有调通
