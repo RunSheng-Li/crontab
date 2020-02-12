@@ -1,0 +1,26 @@
+下载
+wget  https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-4.0.0.tgz
+
+解压
+tar -zxvf mongodb-linux-x86_64-rhel70-4.0.0.tgz
+
+cd 进入 解压后的文件夹
+
+mkdir data 新建data文件夹
+
+nohup bin/mongod --dbpath=./data --bind_ip=0.0.0.0 &
+
+bin/mongo 连接
+
+show databases;
+
+use my_db
+
+建表
+db.createCollection("my_collection")
+
+show collections;
+
+
+
+
