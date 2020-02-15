@@ -25,9 +25,7 @@
 
 
 
-![项目架构](image/项目架构.jpg)
-
-
+![](https://ftp.bmp.ovh/imgs/2020/02/eae406931f6d97b1.png)
 
 - 利用etcd同步全量任务列表到所有worker节点
 - 每个worker独立调度全量任务
