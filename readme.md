@@ -25,9 +25,9 @@
 
 
 
-![image](https://raw.githubusercontent.com/RunSheng-Li/crontab/master/image/%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.png
+![项目架构](image/项目架构.jpg)
 
-)
+
 
 - 利用etcd同步全量任务列表到所有worker节点
 - 每个worker独立调度全量任务
